@@ -3,7 +3,7 @@ Type: Package
 Title: Big Boy Stan
 Version: 0.1.0
 Date: 2024-06-10
-Authors@R: c(person(given = "Marek", family = "Kwiatkowski", role = c("aut", "cre")))
+Authors@R: c(person(given = "Marek", family = "Kwiatkowski", role = c("aut", "cre"), email = "marek.kwiatkowski@protonmail.com"))
 Description: Stan (https://mc-stan.org) is a leading Bayesian computation
   framework capable of fitting models with millions of parameters. This
   package is a collection of tools to work with such large models
