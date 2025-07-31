@@ -9,13 +9,13 @@ is a small collection of tools to help
 models fast while conserving RAM.
 
 The key functionality is the `stansummary` function to obtain posterior
-summaries of parameter subsets using the `stansummary` command-line utility
-bundled with `CmdStan`. For very large models this approach is dramatically
-faster than `cmdstanr::summary()` and requires less RAM.
+summaries of parameter subsets using the `stansummary` command-line utility. 
+For very large models this approach is dramatically
+faster than `cmdstanr::summary` and requires less RAM.
 
 ## Installation
 
-Install directly from github with `devtools` like so:
+Install directly from github with `devtools`:
 
 ```r
 devtools::install_github("https://github.com/huffyhenry/Stanislaw")
