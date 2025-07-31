@@ -4,7 +4,7 @@
 
 [Stan](https://mc-stan.org/) is a leading Bayesian computation framework
 capable of fitting models with millions of parameters. This package
-is (intended to be) a collection of tools to help
+is a small collection of tools to help
 [cmdstanr](https://mc-stan.org/cmdstanr/) users on Linux process such massive
 models fast while conserving RAM.
 
