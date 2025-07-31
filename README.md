@@ -11,7 +11,7 @@ models fast while conserving RAM.
 The key functionality is the `stansummary` function to obtain posterior
 summaries of parameter subsets using the `stansummary` command-line utility. 
 For very large models this approach is dramatically
-faster than `cmdstanr::summary` and requires less RAM.
+faster than the `summary` function provided by `cmdstanr` and requires less RAM.
 
 ## Installation
 
