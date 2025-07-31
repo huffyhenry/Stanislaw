@@ -1,7 +1,7 @@
 Package: Stanislaw
 Type: Package
 Title: Big Boy Stan
-Version: 0.1.2
+Version: 0.1.3
 Date: 2024-06-10
 Authors@R: c(person(given = "Marek", family = "Kwiatkowski", role = c("aut", "cre"), email = "huffyhenry@protonmail.com"))
 Description: Stan (https://mc-stan.org) is a leading Bayesian computation
