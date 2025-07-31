@@ -55,3 +55,6 @@ process_array_summary(x, names = c("player", "time"), labels = list(c("Carlsen",
 # 6 phi[3,2] 2730  Gukesh    2
 
 }
+\seealso{
+\link{extract_matrix}.
+}

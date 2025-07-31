@@ -1,12 +1,12 @@
 Package: Stanislaw
 Type: Package
 Title: Big Boy Stan
-Version: 0.1.1
+Version: 0.1.2
 Date: 2024-06-10
-Authors@R: c(person(given = "Marek", family = "Kwiatkowski", role = c("aut", "cre"), email = "marek.kwiatkowski@protonmail.com"))
+Authors@R: c(person(given = "Marek", family = "Kwiatkowski", role = c("aut", "cre"), email = "huffyhenry@protonmail.com"))
 Description: Stan (https://mc-stan.org) is a leading Bayesian computation
   framework capable of fitting models with millions of parameters. This
-  package is a collection of tools to work with such large models
+  package is a small collection of tools to work with such large models
   in a time- and memory-efficient way. It is designed for cmdstanr users on Linux.
 License: GPL-3
 BugReports: https://github.com/huffyhenry/Stanislaw/issues
@@ -18,4 +18,4 @@ Suggests:
   cmdstanr,
   parallel
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

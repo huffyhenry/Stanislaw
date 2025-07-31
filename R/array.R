@@ -20,6 +20,8 @@
 #'
 #' @returns Data frame with additional columns appended.
 #'
+#' @seealso [extract_matrix].
+#'
 #' @examples
 #' x <- data.frame(
 #'   name = c("phi[1,1]", "phi[1,2]", "phi[2,1]", "phi[2,2]", "phi[3,1]", "phi[3,2]"),
@@ -48,7 +50,6 @@ process_array_summary <- function(df,
                                   names = NULL,
                                   labels = NULL) {
 
-  #keys <- as.character(df[, key])
   keys <- df[[key]]
   keys <- gsub("\\]", "", gsub(".*\\[", "", keys))
   idxs <- strsplit(keys, ",")
@@ -82,4 +83,51 @@ process_array_summary <- function(df,
   }
 
   df
+}
+
+#' Convert a summary of draws to a matrix
+#'
+#' Arrange a posterior summary of parameters that are entries of a matrix
+#' or of a 2D array into an R matrix object.
+#'
+#' @param df Data frame with posterior summaries of matrix entries. Typically
+#' a result of asking for a [stansummary] or [cmdstanr::summary] of a matrix
+#' parameter. Should not contain summaries of any other parameters.
+#' @param key The column in `df` with the parameter name and indexes.
+#' The default corresponds to the output format of [stansummary].
+#' @param value The column in `df` from which the values are to be read into
+#' the matrix. The default corresponds to the posterior mean as reported by [stansummary].
+#' @param cnames Column names to be applied to the resulting matrix. Needs to
+#' be a character vector of the length corresponding to the number of columns
+#' in the matrix. If this condition is not met or if the argument is NULL
+#' (the default), generic X1,...,Xn names are used.
+#'
+#' @returns A matrix.
+#'
+#' @seealso [process_array_summary()].
+#'
+#' @export
+extract_matrix <- function(df,
+                           key = "name",
+                           value = "Mean",
+                           cnames = NULL) {
+
+  M <- process_array_summary(df = df, key = key, names = c(".row", ".col")) |>
+    subset(select = c(".row", ".col", value)) |>
+    reshape(direction = "wide", idvar = ".row", timevar = ".col", v.names = value) |>
+    subset(select = -.row) |>
+    as.matrix()
+
+  if (is.null(cnames)) {
+    cnames <- sprintf("X%d", 1:ncol(M))
+  }
+  else if (length(cnames) != ncol(M)) {
+    warning(message = "Supplied vector of column names does not match matrix width. Generic names used instead.")
+    cnames <- sprintf("X%d", 1:ncol(M))
+  }
+
+  colnames(M) <- cnames
+  rownames(M) <- 1:nrow(M)
+
+  M
 }
