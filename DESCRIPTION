@@ -8,7 +8,7 @@ Description: Stan (https://mc-stan.org) is a leading Bayesian computation
   framework capable of fitting models with millions of parameters. This
   package is a small collection of tools to work with such large models
   in a time- and memory-efficient way. It is designed for cmdstanr users on Linux.
-License: GPL-3
+License: AGPL-3
 BugReports: https://github.com/huffyhenry/Stanislaw/issues
 Encoding: UTF-8
 LazyData: true
