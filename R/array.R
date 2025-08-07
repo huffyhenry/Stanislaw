@@ -97,37 +97,62 @@ process_array_summary <- function(df,
 #' The default corresponds to the output format of [stansummary].
 #' @param value The column in `df` from which the values are to be read into
 #' the matrix. The default corresponds to the posterior mean as reported by [stansummary].
-#' @param cnames Column names to be applied to the resulting matrix. Needs to
-#' be a character vector of the length corresponding to the number of columns
-#' in the matrix. If this condition is not met or if the argument is NULL
-#' (the default), generic X1,...,Xn names are used.
+#' @param rnames,cnames Row and column names to be applied to the result.
+#' Need to be vectors of the correct length (they are not recycled.)
+#' If this condition is not met, generic row and column names are assigned.
+#' NULL (the default) returns a matrix without names.
 #'
 #' @returns A matrix.
 #'
 #' @seealso [process_array_summary()].
 #'
+#' @examples
+#' x <- data.frame(
+#'   name = c("phi[1,1]", "phi[1,2]", "phi[2,1]", "phi[2,2]", "phi[3,1]", "phi[3,2]"),
+#'   Mean = c(2830, 2833, 2790, 2791, 2700, 2730)
+#' )
+#' #       name Mean
+#' # 1 phi[1,1] 2830
+#' # 2 phi[1,2] 2833
+#' # 3 phi[2,1] 2790
+#' # 4 phi[2,2] 2791
+#' # 5 phi[3,1] 2700
+#' # 6 phi[3,2] 2730
+#'
+#' extract_matrix(x, rnames = c("Carlsen", "Caruana", "Gukesh"), cnames = c(2023, 2024))
+#' #         2023 2024
+#' # Carlsen 2830 2833
+#' # Caruana 2790 2791
+#' # Gukesh  2700 2730
+#'
 #' @export
 extract_matrix <- function(df,
                            key = "name",
                            value = "Mean",
+                           rnames = NULL,
                            cnames = NULL) {
 
   M <- process_array_summary(df = df, key = key, names = c(".row", ".col")) |>
+    as.data.frame() |>   # Strip any metadata that can confuse base functions
     subset(select = c(".row", ".col", value)) |>
     reshape(direction = "wide", idvar = ".row", timevar = ".col", v.names = value) |>
     subset(select = -.row) |>
     as.matrix()
 
-  if (is.null(cnames)) {
-    cnames <- sprintf("X%d", 1:ncol(M))
+  if (!is.null(rnames) && (length(rnames) != nrow(M))) {
+    msg <- "Supplied %d row names but %d were expected. Generic names used instead."
+    warning(sprintf(msg, length(rnames), nrow(M)))
+    rnames <- 1:nrow(M)
   }
-  else if (length(cnames) != ncol(M)) {
-    warning(message = "Supplied vector of column names does not match matrix width. Generic names used instead.")
-    cnames <- sprintf("X%d", 1:ncol(M))
-  }
+  rownames(M) <- rnames
 
+  if (!is.null(cnames) && (length(cnames) != ncol(M))) {
+    msg <- "Supplied %d column names but %d were expected. Generic names used instead."
+    warning(sprintf(msg, length(cnames), ncol(M)))
+    cnames <- sprintf("X%d", 1:ncol(M))
+  }
   colnames(M) <- cnames
-  rownames(M) <- 1:nrow(M)
 
   M
 }
+
