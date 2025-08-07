@@ -4,7 +4,7 @@
 \alias{extract_matrix}
 \title{Convert a summary of draws to a matrix}
 \usage{
-extract_matrix(df, key = "name", value = "Mean", cnames = NULL)
+extract_matrix(df, key = "name", value = "Mean", rnames = NULL, cnames = NULL)
 }
 \arguments{
 \item{df}{Data frame with posterior summaries of matrix entries. Typically
@@ -17,10 +17,10 @@ The default corresponds to the output format of \link{stansummary}.}
 \item{value}{The column in \code{df} from which the values are to be read into
 the matrix. The default corresponds to the posterior mean as reported by \link{stansummary}.}
 
-\item{cnames}{Column names to be applied to the resulting matrix. Needs to
-be a character vector of the length corresponding to the number of columns
-in the matrix. If this condition is not met or if the argument is NULL
-(the default), generic X1,...,Xn names are used.}
+\item{rnames, cnames}{Row and column names to be applied to the result.
+Need to be vectors of the correct length (they are not recycled.)
+If this condition is not met, generic row and column names are assigned.
+NULL (the default) returns a matrix without names.}
 }
 \value{
 A matrix.
@@ -28,6 +28,26 @@ A matrix.
 \description{
 Arrange a posterior summary of parameters that are entries of a matrix
 or of a 2D array into an R matrix object.
+}
+\examples{
+x <- data.frame(
+  name = c("phi[1,1]", "phi[1,2]", "phi[2,1]", "phi[2,2]", "phi[3,1]", "phi[3,2]"),
+  Mean = c(2830, 2833, 2790, 2791, 2700, 2730)
+)
+#       name Mean
+# 1 phi[1,1] 2830
+# 2 phi[1,2] 2833
+# 3 phi[2,1] 2790
+# 4 phi[2,2] 2791
+# 5 phi[3,1] 2700
+# 6 phi[3,2] 2730
+
+extract_matrix(x, rnames = c("Carlsen", "Caruana", "Gukesh"), cnames = c(2023, 2024))
+#         2023 2024
+# Carlsen 2830 2833
+# Caruana 2790 2791
+# Gukesh  2700 2730
+
 }
 \seealso{
 \code{\link[=process_array_summary]{process_array_summary()}}.
