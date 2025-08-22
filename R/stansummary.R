@@ -1,24 +1,3 @@
-#' grepl vectorized over patterns
-#'
-#' Return a Boolean mask over `x` identifying elements that match at least one
-#' of `patterns`.
-#'
-#' @param patterns Vector of regular expressions or strings.
-#' @param x Character vector to scan for matches.
-#'
-#' @returns Boolean vector.
-#'
-#' @seealso [grepl].
-vgrepl <- function(patterns, x) {
-  mask <- rep.int(FALSE, length(x))
-  for (p in patterns) {
-    mask <- mask | grepl(p, x)
-  }
-
-  mask
-}
-
-
 #' Read CSV column names
 #'
 #' Read a CSV file in line by line, skipping comments until
@@ -111,19 +90,12 @@ filter_cmdstan_csvs <- function(src,
                                 pars,
                                 dst = replicate(length(src), tempfile()),
                                 parallel = TRUE) {
-  if (parallel) {
-    parallel::mclapply(
-      1:length(src),
-      function(i){filter_cmdstan_csv(src = src[i], pars = pars, dst = dst[i])},
-      mc.cores = min(parallel::detectCores() - 1, length(src))
-    )
+
+  filter_ith_file <- function(i){
+    filter_cmdstan_csv(src = src[i], pars = pars, dst = dst[i])
   }
-  else {
-    lapply(
-      1:length(src),
-      function(i){filter_cmdstan_csv(src = src[i], pars = pars, dst = dst[i])}
-    )
-  }
+
+  fapply(1:length(src), filter_ith_file, parallel = parallel)
 }
 
 #' Summarise posterior draws efficiently
