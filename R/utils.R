@@ -47,3 +47,23 @@ fapply <- function(X, FUN, parallel = FALSE, ...) {
     lapply(X, FUN, ...)
   }
 }
+
+
+#' Convert internal CmdStan parameter names.
+#'
+#' CmdStan replaces the square brackets `[` and commas `,` by dots `.`
+#' in the CSVs with model parameter estimates or posterior draws. This
+#' function restores the square bracket notation, so that eta.3.4 becomes
+#' eta[3,4].
+#'
+#' @param dotnames Character vector of internal parameter names.
+#'
+#' @returns Vector of matching length with corrected names.
+#'
+repair_dotnames <- function(dotnames) {
+  ifelse(
+    grepl("\\.", dotnames),
+    paste0(gsub("\\.", ",", sub("\\.", "[", dotnames)), "]"),
+    dotnames
+  )
+}
