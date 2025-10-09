@@ -18,11 +18,14 @@ mlesummary <- function(fit, pars = NULL) {
     stop("This method can be used only with models fitted by optimisation.")
   }
 
-  wide <- read.csv(fit$output_files(), comment.char = '#')
+  lines <- scan(fit$output_files(), what = "character", comment.char = "#", quiet = TRUE)
+  if (length(lines) != 2) {
+    stop(sprintf("Unexpected format of the CmdStan output file '%s'."), fit$output_files())
+  }
 
   long <- data.frame(
-    variable = colnames(wide),
-    estimate = unlist(wide[1, ]),
+    variable = scan(text = lines[1], what = "character", sep = ",", quiet = TRUE),
+    estimate = as.numeric(scan(text = lines[2], what = "character", sep = ",", quiet = TRUE)),
     row.names = NULL
   )
 
